@@ -1,5 +1,6 @@
 import './index.scss';
 
+// Объект с ресурсами по погоде
 const data = {
   summer: {
     bgUrl: '/assets/summer-bg.jpg',
@@ -20,19 +21,23 @@ const data = {
 
 const pauseIconSrc = '/assets/icons/pause.svg';
 
+// Получение интерактивных элементов
 const bodyElement = document.getElementById('body');
 const playerElement = document.getElementById('player');
 const buttonsElement = document.querySelector('.buttons');
 const buttonList = document.querySelectorAll('.button');
 const volumeControl = document.querySelector('.volume-control');
 
+// Установка фонового изображения по умолчанию
 bodyElement.style.backgroundImage = "url('/assets/summer-bg.jpg')";
 
+// Установка фонового изображения для каждой кнопки
 buttonList.forEach((button) => {
   const { name } = button.dataset;
   button.style.backgroundImage = `url('${data[name].bgUrl}')`;
 });
 
+// Установка слушателя события по нажатию кнопки
 buttonsElement.addEventListener('click', (e) => {
   const button = e.target.closest('.button');
   if (button) {
@@ -62,6 +67,7 @@ buttonsElement.addEventListener('click', (e) => {
   }
 });
 
+// Установка слушателя события при перемещении ползунка для изменения громкости
 volumeControl.addEventListener('change', ({ target }) => {
   playerElement.volume = target.value / 10;
 });
