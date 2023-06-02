@@ -30,3 +30,26 @@ buttonList.forEach((button) => {
   const { name } = button.dataset;
   button.style.backgroundImage = `url('${data[name].bgUrl}')`;
 });
+
+buttonsElement.addEventListener('click', (e) => {
+  const button = e.target.closest('.button');
+  if (button) {
+    const { name: btnName } = button.dataset;
+    const currentSoundName = playerElement.dataset.soundName;
+    if (btnName === currentSoundName) {
+      if (playerElement.paused) {
+        playerElement.play();
+      } else {
+        playerElement.pause();
+      }
+    } else {
+      playerElement.dataset.soundName = btnName;
+      playerElement.src = data[btnName].audioSrc;
+      playerElement.play();
+    }
+  }
+});
+
+volumeControl.addEventListener('change', ({ target }) => {
+  playerElement.volume = target.value / 10;
+});
