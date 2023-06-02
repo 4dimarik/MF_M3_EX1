@@ -7,14 +7,25 @@
     <link rel="shoutcut icon" href="favicon.svg" />
     <title>Weather sounds</title>
   </head>
-  <body>
+  <body class="bg-image" id="body">
     <main>
+      <audio id="player"></audio>
       <div class="container">
-        <div class="title">Weather sounds</div>
-        <div class="button"><div class="button__sun"></div></div>
-        <div class="button"><div class="button__rain"></div></div>
-        <div class="button"><div class="button__snow"></div></div>
-        <div class="volume-control"></div>
+        <div class="title"><h1>Weather sounds</h1></div>
+        <div class="buttons">
+          <div class="button bg-image" data-name="summer">
+            <img src="/assets/icons/sun.svg" />
+          </div>
+          <div class="button bg-image" data-name="rainy">
+            <img src="/assets/icons/cloud-rain.svg" />
+          </div>
+          <div class="button bg-image" data-name="winter">
+            <img src="/assets/icons/cloud-snow.svg" />
+          </div>
+        </div>
+        <div class="volume-control">
+          <input type="range" min="0" max="10" step="1" />
+        </div>
       </div>
     </main>
   </body>
