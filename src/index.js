@@ -53,6 +53,7 @@ buttonsElement.addEventListener('click', (e) => {
         );
         playButton.querySelector('img').src = data[currentSoundName].iconSrc;
       }
+      bodyElement.style.backgroundImage = `url('${data[btnName].bgUrl}')`;
 
       playerElement.dataset.soundName = btnName;
       playerElement.src = data[btnName].audioSrc;
