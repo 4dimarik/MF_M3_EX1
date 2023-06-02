@@ -18,6 +18,8 @@ const data = {
   },
 };
 
+const pauseIconSrc = '/assets/icons/pause.svg';
+
 const bodyElement = document.getElementById('body');
 const playerElement = document.getElementById('player');
 const buttonsElement = document.querySelector('.buttons');
@@ -38,11 +40,20 @@ buttonsElement.addEventListener('click', (e) => {
     const currentSoundName = playerElement.dataset.soundName;
     if (btnName === currentSoundName) {
       if (playerElement.paused) {
+        button.querySelector('img').src = data[btnName].iconSrc;
         playerElement.play();
       } else {
+        button.querySelector('img').src = pauseIconSrc;
         playerElement.pause();
       }
     } else {
+      if (currentSoundName) {
+        const playButton = document.querySelector(
+          `[data-name="${currentSoundName}"]`
+        );
+        playButton.querySelector('img').src = data[currentSoundName].iconSrc;
+      }
+
       playerElement.dataset.soundName = btnName;
       playerElement.src = data[btnName].audioSrc;
       playerElement.play();
