@@ -23,3 +23,10 @@ const playerElement = document.getElementById('player');
 const buttonsElement = document.querySelector('.buttons');
 const buttonList = document.querySelectorAll('.button');
 const volumeControl = document.querySelector('.volume-control');
+
+bodyElement.style.backgroundImage = "url('/assets/summer-bg.jpg')";
+
+buttonList.forEach((button) => {
+  const { name } = button.dataset;
+  button.style.backgroundImage = `url('${data[name].bgUrl}')`;
+});
