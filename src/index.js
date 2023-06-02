@@ -1,1 +1,3 @@
-console.log('app start');
+import './index.scss';
+
+console.log('app start 111');
