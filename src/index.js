@@ -17,3 +17,9 @@ const data = {
     audioSrc: '/assets/sounds/winter.mp3',
   },
 };
+
+const bodyElement = document.getElementById('body');
+const playerElement = document.getElementById('player');
+const buttonsElement = document.querySelector('.buttons');
+const buttonList = document.querySelectorAll('.button');
+const volumeControl = document.querySelector('.volume-control');
