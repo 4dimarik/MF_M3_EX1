@@ -59,10 +59,42 @@ function isHTMLElement(val: Element | null): val is HTMLElement {
   return val instanceof HTMLElement;
 }
 
-function setImageSrc(imgElement: HTMLImageElement | null, src: string): void {
+// Задать атрибут src для HTMLImageElement
+function setBtnIcon(btnElement: HTMLElement, src: string): void {
+  const imgElement = btnElement.querySelector('img');
   if (imgElement) {
     imgElement.src = src;
   }
+}
+
+function onClickCurrentSoundBtn(btnElement: HTMLElement, btnName: string) {
+  if (playerElement.paused) {
+    setBtnIcon(btnElement, data[btnName].iconSrc);
+    playerElement.play();
+  } else {
+    setBtnIcon(btnElement, pauseIconSrc);
+    playerElement.pause();
+  }
+}
+
+function onClickNewSoundBtn(
+  btnElement: HTMLElement,
+  btnName: string,
+  currentSoundName: string | undefined
+) {
+  if (isExistDataAttr(currentSoundName)) {
+    const playButton = document.querySelector(
+      `[data-name="${currentSoundName}"]`
+    );
+    if (isHTMLElement(playButton))
+      setBtnIcon(playButton, data[currentSoundName].iconSrc);
+  }
+
+  bodyElement.style.backgroundImage = `url('${data[btnName].bgUrl}')`;
+
+  playerElement.dataset.soundName = btnName;
+  playerElement.src = data[btnName].audioSrc;
+  playerElement.play();
 }
 
 // Установка слушателя события по нажатию кнопки
@@ -72,33 +104,11 @@ buttonsElement.addEventListener('click', ({ target }) => {
     if (isHTMLElement(button)) {
       const btnName = button.dataset.name;
       const currentSoundName = playerElement.dataset.soundName;
-      if (isExistDataAttr(btnName) && isExistDataAttr(currentSoundName)) {
+      if (isExistDataAttr(btnName)) {
         if (btnName === currentSoundName) {
-          const imgElement = button.querySelector('img');
-          if (playerElement.paused) {
-            setImageSrc(imgElement, data[btnName].iconSrc);
-            playerElement.play();
-          } else {
-            setImageSrc(imgElement, pauseIconSrc);
-            playerElement.pause();
-          }
+          onClickCurrentSoundBtn(button, btnName);
         } else {
-          if (currentSoundName) {
-            const playButton = document.querySelector(
-              `[data-name="${currentSoundName}"]`
-            );
-            if (playButton)
-              setImageSrc(
-                playButton.querySelector('img'),
-                data[currentSoundName].iconSrc
-              );
-          }
-
-          bodyElement.style.backgroundImage = `url('${data[btnName].bgUrl}')`;
-
-          playerElement.dataset.soundName = btnName;
-          playerElement.src = data[btnName].audioSrc;
-          playerElement.play();
+          onClickNewSoundBtn(button, btnName, currentSoundName);
         }
       }
     }
