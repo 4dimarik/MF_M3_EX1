@@ -93,17 +93,17 @@ const onClickNewSoundBtn = (btnElement: HTMLElement, btnName: string): void => {
 // Установка слушателя события по нажатию кнопки
 buttonsElement.addEventListener('click', ({ target }) => {
   if (target instanceof HTMLElement) {
-    const button = target.closest('.button');
-    if (button instanceof HTMLElement) {
-      const btnName = button.dataset.name;
-      if (!isExistDataAttr(btnName))
-        throw new Error(`У элемента ${button} отсутствует атрибут data-name`);
+    const button = target.closest('.button') as HTMLElement;
 
-      if (btnName === currentSound.name) {
-        onClickCurrentSoundBtn(button, btnName);
-      } else {
-        onClickNewSoundBtn(button, btnName);
-      }
+    if (!isExistDataAttr(button.dataset.name))
+      throw new Error(`У элемента ${button} отсутствует атрибут data-name`);
+
+    const btnName = button.dataset.name;
+
+    if (button && btnName && btnName === currentSound.name) {
+      onClickCurrentSoundBtn(button, btnName);
+    } else if (button && btnName) {
+      onClickNewSoundBtn(button, btnName);
     }
   }
 });
