@@ -1,13 +1,17 @@
 import './index.scss';
 
-interface Data {
-  [id: string]: WeatherSrc;
-}
-
 interface WeatherSrc {
   bgUrl: string;
   iconSrc: string;
   audioSrc: string;
+}
+interface Data {
+  [id: string]: WeatherSrc;
+}
+
+interface CurrentSound {
+  name: string | null;
+  btn: HTMLElement | null;
 }
 
 // Объект с ресурсами по погоде
@@ -42,7 +46,12 @@ const volumeControl = document.querySelector('.volume-control') as HTMLElement;
 
 // Установка фонового изображения по умолчанию
 bodyElement.style.backgroundImage = "url('/assets/summer-bg.jpg')";
-
+//
+let currentSoundName: string;
+const currentSound: CurrentSound = {
+  name: null,
+  btn: null,
+};
 // Установка фонового изображения для каждой кнопки
 buttonList.forEach((button) => {
   const { name } = button.dataset;
@@ -51,15 +60,12 @@ buttonList.forEach((button) => {
   }
 });
 
+// Функция определяет существует ли data атрибут в HTMLElement
 function isExistDataAttr(val: string | undefined): val is string {
   return typeof val === 'string';
 }
 
-function isHTMLElement(val: Element | null): val is HTMLElement {
-  return val instanceof HTMLElement;
-}
-
-// Задать атрибут src для HTMLImageElement
+// Функция изменяет иконку кнопки
 function setBtnIcon(btnElement: HTMLElement, src: string): void {
   const imgElement = btnElement.querySelector('img');
   if (imgElement) {
@@ -67,7 +73,11 @@ function setBtnIcon(btnElement: HTMLElement, src: string): void {
   }
 }
 
-function onClickCurrentSoundBtn(btnElement: HTMLElement, btnName: string) {
+// функция выполняет дейцствия при нажатии на кнопку с текущим звуком
+function onClickCurrentSoundBtn(
+  btnElement: HTMLElement,
+  btnName: string
+): void {
   if (playerElement.paused) {
     setBtnIcon(btnElement, data[btnName].iconSrc);
     playerElement.play();
@@ -77,39 +87,34 @@ function onClickCurrentSoundBtn(btnElement: HTMLElement, btnName: string) {
   }
 }
 
-function onClickNewSoundBtn(
-  btnElement: HTMLElement,
-  btnName: string,
-  currentSoundName: string | undefined
-) {
-  if (isExistDataAttr(currentSoundName)) {
-    const playButton = document.querySelector(
-      `[data-name="${currentSoundName}"]`
-    );
-    if (isHTMLElement(playButton))
-      setBtnIcon(playButton, data[currentSoundName].iconSrc);
+// функция выполняет дейцствия при нажатии на кнопку с новым звуком
+const onClickNewSoundBtn = (btnElement: HTMLElement, btnName: string): void => {
+  if (currentSound.btn && currentSound.name) {
+    setBtnIcon(currentSound.btn, data[currentSound.name].iconSrc);
   }
+
+  currentSound.btn = btnElement;
+  currentSound.name = btnName;
 
   bodyElement.style.backgroundImage = `url('${data[btnName].bgUrl}')`;
 
-  playerElement.dataset.soundName = btnName;
   playerElement.src = data[btnName].audioSrc;
   playerElement.play();
-}
+};
 
 // Установка слушателя события по нажатию кнопки
 buttonsElement.addEventListener('click', ({ target }) => {
   if (target instanceof HTMLElement) {
     const button = target.closest('.button');
-    if (isHTMLElement(button)) {
+    if (button instanceof HTMLElement) {
       const btnName = button.dataset.name;
-      const currentSoundName = playerElement.dataset.soundName;
-      if (isExistDataAttr(btnName)) {
-        if (btnName === currentSoundName) {
-          onClickCurrentSoundBtn(button, btnName);
-        } else {
-          onClickNewSoundBtn(button, btnName, currentSoundName);
-        }
+      if (!isExistDataAttr(btnName))
+        throw new Error(`У элемента ${button} отсутствует атрибут data-name`);
+
+      if (btnName === currentSound.name) {
+        onClickCurrentSoundBtn(button, btnName);
+      } else {
+        onClickNewSoundBtn(button, btnName);
       }
     }
   }
