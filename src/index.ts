@@ -1,7 +1,7 @@
 import './index.scss';
 import { Data, CurrentSound } from './types/index';
 
-// Объект с ресурсами по погоде
+// Объект с ресурсами о погоде
 const data: Data = {
   summer: {
     bgUrl: '/assets/summer-bg.jpg',
@@ -33,8 +33,8 @@ const volumeControl = document.querySelector('.volume-control') as HTMLElement;
 
 // Установка фонового изображения по умолчанию
 bodyElement.style.backgroundImage = "url('/assets/summer-bg.jpg')";
-//
-let currentSoundName: string;
+
+// Данные отекущей погоде
 const currentSound: CurrentSound = {
   name: null,
   btn: null,
@@ -76,7 +76,8 @@ function onClickCurrentSoundBtn(
 
 // функция выполняет дейцствия при нажатии на кнопку с новым звуком
 const onClickNewSoundBtn = (btnElement: HTMLElement, btnName: string): void => {
-  if (currentSound.btn && currentSound.name) {
+  // Если текущий звук на паузе версуть иконку по умолчанию
+  if (currentSound.btn && currentSound.name && playerElement.paused) {
     setBtnIcon(currentSound.btn, data[currentSound.name].iconSrc);
   }
 
